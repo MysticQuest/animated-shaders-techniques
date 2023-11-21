@@ -215,6 +215,7 @@ GameObject:
   m_Component:
   - component: {fileID: 330136405}
   - component: {fileID: 330136407}
+  - component: {fileID: 330136408}
   m_Layer: 0
   m_Name: ManagerContainer
   m_TagString: Untagged
@@ -253,6 +254,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Text: {fileID: 425015966}
+--- !u!114 &330136408
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330136404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56e976031f3eb32458bfd5bad0bb4e63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  splineContainer: {fileID: 1851137862}
+  lineMaterial: {fileID: 2100000, guid: cc129b9a70d3e1e4aa0c06e78143672d, type: 2}
+  screenEffectMaterial: {fileID: 2100000, guid: 5fc130dc6de046d46943bea00e16bb25, type: 2}
 --- !u!1 &425015964
 GameObject:
   m_ObjectHideFlags: 0
@@ -590,8 +606,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71e385a1f9da93243a368015ce76dfda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  splineContainer: {fileID: 1851137862}
-  lineMaterial: {fileID: 2100000, guid: cc129b9a70d3e1e4aa0c06e78143672d, type: 2}
   screenEffectMaterial: {fileID: 2100000, guid: 5fc130dc6de046d46943bea00e16bb25, type: 2}
 --- !u!114 &963194230
 MonoBehaviour:

@@ -77,14 +77,15 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _PerspectiveScale: 1.5
+    - _PerspectiveScale: 1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _Speed: 0.65
     - _SpotEmissionStrength: 8
     - _SpotSize: 0.1
+    - _SpotSpeed: 1
     - _SpotTextureScale: 0.1
-    - _SpotTextureScaleFactor: 1
+    - _SpotTextureScaleFactor: 0.54
     - _SpotWidth: 0.01
     - _SrcBlend: 1
     - _UVSec: 0
@@ -92,7 +93,9 @@ Material:
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _SplinePoints: {r: 0, g: 0, b: 0, a: 0}
     - _SpotEmissionColor: {r: 0.14275646, g: 1, b: 0, a: 1}
-    - _SpotScreenPosition: {r: 0.62930894, g: 0.9097637, b: 0, a: 0}
-    - _SpotWorldPosition: {r: 5.039656, g: 3.3986208, b: 3.757425, a: 1}
+    - _SpotScreenPosition: {r: 0.35465276, g: 0.12902042, b: 0, a: 0}
+    - _SpotWorldPosition: {r: 5.002369, g: 3.8999035, b: 3.869655, a: 0}
+    - _TextureColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []

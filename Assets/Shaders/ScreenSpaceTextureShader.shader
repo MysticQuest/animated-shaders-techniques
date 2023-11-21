@@ -1,13 +1,15 @@
+// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
 Shader "Custom/ScreenSpaceTextureShader"
 {
     Properties
     {
         _MainTex ("Base (RGB)", 2D) = "white" {}
         _SpotTexture ("Spot Texture", 2D) = "white" {}
-        _SpotScreenPosition("Spot Screen Position", Vector) = (0,0,0,0)
-        _SpotWorldPosition("Spot World Position", Vector) = (0,0,0,0)
+        _TextureColor ("Texture Color", Color) = (1,1,1,1)
+        [HideInInspector] _SpotWorldPosition("Spot World Position", Vector) = (0,0,0,0)
         _SpotTextureScaleFactor("Spot Texture Scale", Float) = 1
-        _PerspectiveScale("Perspective Scale", Float) = 1.0
+        [HideInInspector] _PerspectiveScale("Perspective Scale", Float) = 1.0
     }
     SubShader
     {
@@ -22,21 +24,35 @@ Shader "Custom/ScreenSpaceTextureShader"
 
             sampler2D _MainTex;
             sampler2D _SpotTexture;
-            float4 _SpotScreenPosition;
+            sampler2D _CameraDepthTexture;
+            float4 _TextureColor;
             float4 _SpotWorldPosition;
             float _PerspectiveScale;
-            float _SpotTextureScale;
             float _SpotTextureScaleFactor;
+
+            fixed2 WorldToScreenPos(fixed3 vectorWorldToCam){
+                vectorWorldToCam = normalize(vectorWorldToCam - _WorldSpaceCameraPos);
+                fixed3 vectorCameraSpace = mul(unity_WorldToCamera, vectorWorldToCam);
+                fixed height = 2 * vectorCameraSpace.z / unity_CameraProjection._m11;
+                fixed width = _ScreenParams.x / _ScreenParams.y * height;
+                fixed2 uv = 0;
+                uv.x = (vectorCameraSpace.x + width / 2) / width;
+                uv.y = (vectorCameraSpace.y + height / 2) / height;
+                return uv;
+            }
 
             fixed4 frag (v2f_img i) : SV_Target
             {
-                // Sample the main texture
                 fixed4 col = tex2D(_MainTex, i.uv);
-    
-                // Calculate the normalized screen space UV for the spot
-                float2 screenSpaceUV = (i.uv - _SpotScreenPosition.xy) * 2.0;
-                screenSpaceUV.y *= _ScreenParams.y / _ScreenParams.x; // Correct for aspect ratio
 
+                fixed2 _SpotScreenPosition = WorldToScreenPos(_SpotWorldPosition);
+
+                // Calculate the normalized screen space UV for the spot
+                float2 screenSpaceUV = i.uv - _SpotScreenPosition;
+                // Correct for aspect ratio
+                screenSpaceUV.y *= _ScreenParams.y / _ScreenParams.x; 
+
+                // Distance to scale 
                 float distanceToSpot = length(_SpotWorldPosition - _WorldSpaceCameraPos);
                 float perspectiveScale = 1.0 / (distanceToSpot * _PerspectiveScale);
                 perspectiveScale *= _SpotTextureScaleFactor;
@@ -50,15 +66,11 @@ Shader "Custom/ScreenSpaceTextureShader"
                 // Clamp the UVs so the texture doesn't tile
                 float2 clampedUV = saturate(centeredUV);
 
-                // Only apply the texture within its bounds
-                if (all(clampedUV >= 0) && all(clampedUV <= 1))
-                {
-                    // Sample the spot texture using the clamped UV coordinates
-                    fixed4 spotTexColor = tex2D(_SpotTexture, clampedUV);
-
-                    // Blend the spot texture over the main texture based on the alpha of the spot texture
-                    col = lerp(col, spotTexColor, spotTexColor.a);
-                }
+                // Sample the spot texture using the clamped UV coordinates
+                fixed4 spotTexColor = tex2D(_SpotTexture, clampedUV);
+                spotTexColor *= _TextureColor;
+                // Blend the spot texture over the main texture based on the alpha of the spot texture
+                col = lerp(col, spotTexColor, spotTexColor.a);
 
                 return col;
             }
