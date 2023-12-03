@@ -1,5 +1,3 @@
-# shaders-spline-techs
-
 ### Three ways to animate a "point of light" moving along a spline with shaders.
 
 ### Scenes:
